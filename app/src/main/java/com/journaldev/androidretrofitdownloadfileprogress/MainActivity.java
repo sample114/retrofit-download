@@ -64,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
         askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 101);
 
         txtProgressPercent = findViewById(R.id.txtProgressPercent);
+        txtProgressPercent.setVisibility(View.GONE);
         progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
         btnDownloadFile = findViewById(R.id.button);
 
         btnDownloadFile.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +132,9 @@ public class MainActivity extends AppCompatActivity {
         protected void onProgressUpdate(Pair<Integer, Long>... progress) {
 
             Log.d("API123", progress[0].second + " ");
+            txtProgressPercent.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            btnDownloadFile.setVisibility(View.GONE);
 
             if (progress[0].first == 100) {
                 Toast.makeText(getApplicationContext(), "File downloaded successfully", Toast.LENGTH_SHORT).show();
