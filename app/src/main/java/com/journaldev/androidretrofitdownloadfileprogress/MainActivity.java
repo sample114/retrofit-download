@@ -2,6 +2,7 @@ package com.journaldev.androidretrofitdownloadfileprogress;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -74,7 +75,25 @@ public class MainActivity extends AppCompatActivity {
         btnDownloadFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                downloadZipFile();
+                File destinationFile = new File(Environment.getExternalStorageDirectory() +
+                        File.separator + "_TEST" , "upsc_cse_syllabus.pdf");
+                if(destinationFile.exists()){
+                    Toast.makeText(getApplicationContext(), "File found...", Toast.LENGTH_SHORT).show();
+                    File folder = new File(Environment.getExternalStorageDirectory() +
+                            File.separator + "_TEST", "_TEST2");
+                    boolean success = true;
+                    if (!folder.exists()) {
+                        success = folder.mkdirs();
+                    }
+                    if (success) {
+                        // Do something on success
+                    } else {
+                        // Do something else on failure
+                    }
+                }
+                else {
+                    downloadZipFile();
+                }
             }
         });
     }
@@ -186,7 +205,9 @@ public class MainActivity extends AppCompatActivity {
     private void saveToDisk(ResponseBody body, String filename) {
         try {
 
-            File destinationFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename);
+            //File destinationFile = new File(Environment.getExternalStoragePublicDirectory("NCERTBOOKS2"), filename);
+            File destinationFile = new File(Environment.getExternalStorageDirectory() +
+                    File.separator + "_TEST"  , "/TEST2/"+filename);
 
             InputStream inputStream = null;
             OutputStream outputStream = null;
