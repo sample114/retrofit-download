@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView txtProgressPercent;
     ProgressBar progressBar;
-    Button btnDownloadFile;
+    Button btnDownloadFile,btnOpenFile;
 
     DownloadZipFileTask downloadZipFileTask;
     private static final String TAG = "MainActivity";
@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         btnDownloadFile = findViewById(R.id.button);
+        btnOpenFile = findViewById(R.id.button2);
+        btnOpenFile.setVisibility(View.GONE);
 
         btnDownloadFile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
                     downloadZipFileTask.execute(response.body());
 
                 } else {
-                    Log.d(TAG, "Connection failed " + response.errorBody());
+                    Log.d("MYTAG", "Connection failed " + response.errorBody());
+                    Toast.makeText(getApplicationContext(), "NO INTERNET...", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -102,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
                 Log.e(TAG, t.getMessage());
+                Toast.makeText(getApplicationContext(), "Please Connect to Internet to Download", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -129,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
+        @SuppressLint("SetTextI18n")
         protected void onProgressUpdate(Pair<Integer, Long>... progress) {
 
             Log.d("API123", progress[0].second + " ");
@@ -138,6 +143,9 @@ public class MainActivity extends AppCompatActivity {
 
             if (progress[0].first == 100) {
                 Toast.makeText(getApplicationContext(), "File downloaded successfully", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                txtProgressPercent.setVisibility(View.GONE);
+                btnOpenFile.setVisibility(View.VISIBLE);
                 //btnDownloadFile.setVisibility(View.GONE);
             }
 
@@ -149,11 +157,15 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("API123", progress[0].second + " " + progress[0].first);
                 Log.d("API123",humanReadableByteCountSI((long)progress[0].first));
 
-                txtProgressPercent.setText("Progress " + currentProgress + "%");
+                txtProgressPercent.setText(humanReadableByteCountSI(progress[0].first)+" / "+humanReadableByteCountSI(progress[0].second));
+                //txtProgressPercent.setText("Progress " + currentProgress + "%");
 
             }
 
             if (progress[0].first == -1) {
+                btnDownloadFile.setVisibility(View.VISIBLE);
+                txtProgressPercent.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), "Download failed", Toast.LENGTH_SHORT).show();
             }
 
