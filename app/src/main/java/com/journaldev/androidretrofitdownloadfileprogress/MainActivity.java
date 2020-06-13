@@ -18,6 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,6 +28,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -32,10 +36,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView txtProgressPercent;
+    /*TextView txtProgressPercent;
     ProgressBar progressBar;
     Button btnDownloadFile,btnOpenFile;
 
@@ -53,16 +58,65 @@ public class MainActivity extends AppCompatActivity {
             ci.next();
         }
         return String.format("%.1f %cB", bytes / 1000.0, ci.current());
-    }
+    }*/
 
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_json);
+        textView = findViewById(R.id.text_view_result);
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
 
 
-        askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 101);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://test-118cd.firebaseio.com/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+        Call<List<Post>> listCall = jsonPlaceHolderApi.getPosts();
+
+        listCall.enqueue(new Callback<List<Post>>() {
+            @Override
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                if (!response.isSuccessful()) {
+                    textView.setText("Code " + response.code());
+                    return;
+                }
+
+                List<Post> posts = response.body();
+
+                for (Post post : posts) {
+                    String content = "";
+                    content += "ID: " + post.getId() + "\n";
+                    content += "User ID: " + post.getUserID() + "\n";
+                    content += "Title: " + post.getTitle() + "\n";
+                    content += "Body: " + post.getText() + "\n\n";
+
+                    textView.append(content);
+                    textView.append(""+response.code());
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+                textView.setText(t.getMessage());
+                textView.append("-----");
+            }
+        });
+
+
+
+        /*askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 101);
 
         txtProgressPercent = findViewById(R.id.txtProgressPercent);
         txtProgressPercent.setVisibility(View.GONE);
@@ -98,7 +152,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void downloadZipFile() {
+         */
+
+    /*private void downloadZipFile() {
 
         RetrofitInterface downloadService = createService(RetrofitInterface.class, "https://firebasestorage.googleapis.com/");
         Call<ResponseBody> call = downloadService.downloadFileByUrl("v0/b/test-118cd.appspot.com/o/pdf-files%2FUPSC%20CSE%20Syllabus.pdf?alt=media&token=382a9cec-19cd-446c-a225-70094c91ac26");
@@ -277,5 +333,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
         }
+
+     */
     }
 }
