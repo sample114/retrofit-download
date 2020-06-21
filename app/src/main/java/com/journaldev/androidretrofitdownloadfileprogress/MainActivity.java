@@ -178,6 +178,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
+            Toast.makeText(getApplicationContext(), "Download Successful", Toast.LENGTH_SHORT).show();
+
         }
 
 
