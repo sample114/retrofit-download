@@ -40,7 +40,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    /*TextView txtProgressPercent;
+    TextView txtProgressPercent;
     ProgressBar progressBar;
     Button btnDownloadFile,btnOpenFile;
 
@@ -58,16 +58,16 @@ public class MainActivity extends AppCompatActivity {
             ci.next();
         }
         return String.format("%.1f %cB", bytes / 1000.0, ci.current());
-    }*/
+    }
 
     private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        setContentView(R.layout.activity_json);
-        textView = findViewById(R.id.text_view_result);
+        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_json);
+        /*textView = findViewById(R.id.text_view_result);
 
         Gson gson = new GsonBuilder()
                 .setLenient()
@@ -112,11 +112,11 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(t.getMessage());
                 textView.append("-----");
             }
-        });
+        });*/
 
 
 
-        /*askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 101);
+        askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 101);
 
         txtProgressPercent = findViewById(R.id.txtProgressPercent);
         txtProgressPercent.setVisibility(View.GONE);
@@ -152,9 +152,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-         */
 
-    /*private void downloadZipFile() {
+
+    private void downloadZipFile() {
 
         RetrofitInterface downloadService = createService(RetrofitInterface.class, "https://firebasestorage.googleapis.com/");
         Call<ResponseBody> call = downloadService.downloadFileByUrl("v0/b/test-118cd.appspot.com/o/pdf-files%2FUPSC%20CSE%20Syllabus.pdf?alt=media&token=382a9cec-19cd-446c-a225-70094c91ac26");
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, final Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "Got the body for the file");
+                    Log.d("MYT", "Got the body for the file");
 
                     Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_SHORT).show();
 
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                 btnDownloadFile.setVisibility(View.VISIBLE);
                 txtProgressPercent.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(getApplicationContext(), "Download failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Download failed11", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -334,6 +334,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
         }
 
-     */
+
     }
 }
